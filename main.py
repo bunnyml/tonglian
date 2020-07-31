@@ -4,8 +4,6 @@ import copy
 import requests
 import hashlib
 import re
-from flask import Flask
-from flask import request
 
 #API_URL
 MAIN_URL = "http://125.35.5.51/cap-aco-bx"
@@ -17,7 +15,7 @@ ZS_DATE_END = time.strftime('%Y-%m-%d',time.localtime())+' 09:30:00'
 WS_DATE_START = time.strftime('%Y-%m-%d',time.localtime())+' 18:00:00'
 WS_DATE_END = time.strftime('%Y-%m-%d',time.localtime())+' 23:59:59'
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
 
 HEADERS = {
@@ -75,7 +73,7 @@ def chuli_date(type, ts, startjz):
         if ts > startjz:
             return False
 
-@app.route('/getStatus', methods=['GET'])
+# @app.route('/getStatus', methods=['GET'])
 def main():
     #这几个时间ts用来做判断用
     TS_DATE_START_JZ = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 09:30:00', "%Y-%m-%d %H:%M:%S")))
@@ -94,4 +92,5 @@ def main():
     return res
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    main()
