@@ -50,7 +50,10 @@ def get_sign_hs(start, end):
     }
     try:
         result = requests.get(url=SIGN_HS_URL, cookies=N_COOKIE, params=SIGN_HS_DATE, headers=HEADERS,  timeout=5)
+        print('result结果是')
+        print(result)
         url = str(result.url)
+        print('url是'+url)
         if bool(re.search('cap-aco-bx/login',url)) == False:
             returnData = result.json()
             if returnData['rows'] != []:
@@ -80,11 +83,14 @@ def main():
     TS_DATE_END_START = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 18:30:00', "%Y-%m-%d %H:%M:%S")))
     TS_DATE_END_JZ = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 20:00:00', "%Y-%m-%d %H:%M:%S")))
     #判断当前时间来决定提醒早上打卡还是晚上打卡
+    print('开始判断当前时间属于早上打卡还是晚上打卡')
     nowts = int(time.time())
     res = ""
     if nowts < TS_DATE_START_JZ:
+        print('现在是早上打卡时间')
         res = get_sign_hs(ZS_DATE_START, ZS_DATE_END)
     if nowts > TS_DATE_END_START:
+        print('现在是晚上上打卡时间')
         res = get_sign_hs(WS_DATE_START, WS_DATE_END)
     else:
         print('还没到时间')
