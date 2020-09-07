@@ -79,7 +79,7 @@ def chuli_date(type, ts, startjz):
     if type == 'z':
         if ts > startjz:
             return False
-def push_wechat():
+def push_wechat(title, desp):
     requests.get(url="https://sc.ftqq.com/SCU112622Td6ab1713c2c49f53019938b14b42c8055f564265d31e7.send?text="+title+"&desp="+desp+"当前时间是："+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+"",  timeout=5)
 
 # @app.route('/getStatus', methods=['GET'])
