@@ -27,9 +27,9 @@ COOKIE = "Cookie"
 EMPTY_STR = r''
 ROWS = 'rows'
 EQUAL = r'='
-COOKIE_VAL = "sid=fb4c11bf-c2d9-4caa-b556-f7867d03a8a8; username=yz; password=; rememberme=0; autoSubmit=0; sys=OA"
+COOKIE_VAL = "sid=7c1005bb-5eed-480f-9ae9-1708e083f8fa; username=yz; password=; rememberme=0; autoSubmit=0; sys=OA"
 N_COOKIE = {
-    'sid':'fb4c11bf-c2d9-4caa-b556-f7867d03a8a8',
+    'sid':'7c1005bb-5eed-480f-9ae9-1708e083f8fa',
     'username':'yz',
     'password':'',
     'rememberme':'0',
