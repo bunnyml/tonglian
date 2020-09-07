@@ -27,9 +27,9 @@ COOKIE = "Cookie"
 EMPTY_STR = r''
 ROWS = 'rows'
 EQUAL = r'='
-COOKIE_VAL = "sid=a509e711-2acd-4e58-a3dc-853e8994b036; username=yz; password=; rememberme=0; autoSubmit=0; sys=OA"
+COOKIE_VAL = "sid=fb4c11bf-c2d9-4caa-b556-f7867d03a8a8; username=yz; password=; rememberme=0; autoSubmit=0; sys=OA"
 N_COOKIE = {
-    'sid':'93e2f706-d053-42f9-a093-e968fb87ce12',
+    'sid':'fb4c11bf-c2d9-4caa-b556-f7867d03a8a8',
     'username':'yz',
     'password':'',
     'rememberme':'0',
@@ -60,15 +60,19 @@ def get_sign_hs(start, end):
                 #获取数据库取到的打卡时间
                 #datats = int(time.mktime(time.strptime(i['signInDate'][:19], "%Y-%m-%d %H:%M:%S")))
                 print('打过卡了，真棒！')
+                push_wechat("已经打过卡了，真棒！", "这是今天的打卡情况："+returnData['rows'][0]['signInDate']+"")
                 return '打过卡了，真棒！'
             else:
                 print('该打卡了')
+                push_wechat("打卡时间到了！", "今天还没打卡，快去打卡吧！")
                 return '该打卡了'
         else:
             print('cookie过期了')
+            push_wechat("cookie过期了！", "cookie过期了，请重新设置！")
             return  'cookie过期了'
     except Exception as e:
         print('异常了')
+        push_wechat("程序异常了，请检查！", "程序异常了，请检查！")
         return '异常了'
 
 def chuli_date(type, ts, startjz):
@@ -76,7 +80,7 @@ def chuli_date(type, ts, startjz):
         if ts > startjz:
             return False
 def push_wechat():
-    requests.get(url="https://sc.ftqq.com/SCU112622Td6ab1713c2c49f53019938b14b42c8055f564265d31e7.send?text=今天没有打卡哟吧&desp=大哥，你今天真的没有打卡ss，我真的没骗你",  timeout=5)
+    requests.get(url="https://sc.ftqq.com/SCU112622Td6ab1713c2c49f53019938b14b42c8055f564265d31e7.send?text="+title+"&desp="+desp+"当前时间是："+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+"",  timeout=5)
 
 # @app.route('/getStatus', methods=['GET'])
 def main():
@@ -96,7 +100,7 @@ def main():
         res = get_sign_hs(WS_DATE_START, WS_DATE_END)
     else:
         print('测试微信推送')
-        push_wechat()
+        push_wechat("还没到时间", "还没到打卡时间")
         res = "还没到时间"
     return res
 
