@@ -75,6 +75,8 @@ def chuli_date(type, ts, startjz):
     if type == 'z':
         if ts > startjz:
             return False
+def push_wechat():
+    requests.get(url="https://sc.ftqq.com/SCU112622Td6ab1713c2c49f53019938b14b42c8055f564265d31e7.send?text=今天没有打卡哟吧&desp=大哥，你今天真的没有打卡ss，我真的没骗你",  timeout=5)
 
 # @app.route('/getStatus', methods=['GET'])
 def main():
@@ -93,7 +95,8 @@ def main():
         print('现在是晚上上打卡时间')
         res = get_sign_hs(WS_DATE_START, WS_DATE_END)
     else:
-        print('还没到时间')
+        print('测试微信推送')
+        push_wechat()
         res = "还没到时间"
     return res
 
