@@ -8,6 +8,7 @@ import re
 #API_URL
 MAIN_URL = "http://125.35.5.51/cap-aco-bx"
 SIGN_HS_URL = "http://125.35.5.51/cap-aco-bx/signInController/findSignInInfoByCondition"
+LOGIN_URL = "http://125.35.5.51/cap-aco-bx/login"
 
 #这两个参数用来请求数据用
 ZS_DATE_START = time.strftime('%Y-%m-%d',time.localtime())+' 00:00:00'
@@ -27,15 +28,24 @@ COOKIE = "Cookie"
 EMPTY_STR = r''
 ROWS = 'rows'
 EQUAL = r'='
-COOKIE_VAL = "sid=a509e711-2acd-4e58-a3dc-853e8994b036; username=yz; password=; rememberme=0; autoSubmit=0; sys=OA"
+# COOKIE_VAL = "sid=b83ff1ce-517a-491f-a342-c2e0a9327de1; username=yz; password=; rememberme=0; autoSubmit=0; sys=OA"
 N_COOKIE = {
-    'sid':'93e2f706-d053-42f9-a093-e968fb87ce12',
+    'sid':'b83ff1ce-517a-491f-a342-c2e0a9327de1',
     'username':'yz',
     'password':'',
     'rememberme':'0',
     'autoSubmit':'0',
     'sys':'OA'
 }
+LOGIN_PARAM = {
+    'sys':'OA',
+    'username':'yz',
+    'password':'yy616499',
+    'rememberme':'0',
+    'autoSubmit':'0'
+}
+
+s = requests.Session()
 
 def get_sign_hs(start, end):
     # headers = copy.copy(HEADERS)
@@ -49,7 +59,7 @@ def get_sign_hs(start, end):
         'queryEndTime':end
     }
     try:
-        result = requests.get(url=SIGN_HS_URL, cookies=N_COOKIE, params=SIGN_HS_DATE, headers=HEADERS,  timeout=5)
+        result = s.get(url=SIGN_HS_URL, cookies=N_COOKIE, params=SIGN_HS_DATE, headers=HEADERS,  timeout=5)
         print('result结果是')
         print(result)
         url = str(result.url)
@@ -60,21 +70,27 @@ def get_sign_hs(start, end):
                 #获取数据库取到的打卡时间
                 #datats = int(time.mktime(time.strptime(i['signInDate'][:19], "%Y-%m-%d %H:%M:%S")))
                 print('打过卡了，真棒！')
+                push_wechat("已经打过卡了，真棒！", "这是今天的打卡情况："+returnData['rows'][0]['signInDate']+"")
                 return '打过卡了，真棒！'
             else:
                 print('该打卡了')
+                push_wechat("打卡时间到了！", "今天还没打卡，快去打卡吧！")
                 return '该打卡了'
         else:
             print('cookie过期了')
+            push_wechat("cookie过期了！", "cookie过期了，请重新设置！")
             return  'cookie过期了'
     except Exception as e:
         print('异常了')
+        push_wechat("程序异常了，请检查！", "程序异常了，请检查！")
         return '异常了'
 
 def chuli_date(type, ts, startjz):
     if type == 'z':
         if ts > startjz:
             return False
+def push_wechat(title, desp):
+    requests.get(url="https://sc.ftqq.com/SCU112622Td6ab1713c2c49f53019938b14b42c8055f564265d31e7.send?text="+title+"&desp="+desp+"当前时间是："+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+"",  timeout=5)
 
 # @app.route('/getStatus', methods=['GET'])
 def main():
@@ -93,10 +109,15 @@ def main():
         print('现在是晚上上打卡时间')
         res = get_sign_hs(WS_DATE_START, WS_DATE_END)
     else:
-        print('还没到时间')
+        print('计划时间外！')
         res = "还没到时间"
     return res
 
+def getCookie():
+    result = s.post(LOGIN_URL, LOGIN_PARAM)
+    N_COOKIE['sid'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
+
 if __name__ == '__main__':
     # app.run()
+    getCookie()
     main()
