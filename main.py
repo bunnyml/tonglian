@@ -151,6 +151,7 @@ def main():
         logger.info("计划时间外！")
 
 def getCookie():
+    logger.info('当前时区'+time.strftime('%Z', time.localtime()))
     logger.info("开始获取Cookie")
     result = s.post(LOGIN_URL, LOGIN_PARAM)
     N_COOKIE['sid'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
