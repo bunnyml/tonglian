@@ -106,7 +106,7 @@ def get_sign_hs(start, end):
                 #datats = int(time.mktime(time.strptime(i['signInDate'][:19], "%Y-%m-%d %H:%M:%S")))
                 signHistory = list_all_sign()
                 # push_wechat("已经打过卡了，真棒！", "这是今天的打卡情况："+returnData['rows'][0]['signInDate']+"")
-                push_wechat("已经打过卡了，真棒！", "这是今天的打卡情况："+signHistory+"")
+                push_wechat("已经打过卡了，真棒！", signHistory)
             else:
                 logger.info("该打卡了")
                 signHistory = list_all_sign()
