@@ -136,7 +136,7 @@ def main():
     logger.info("调用主方法")
     #这几个时间ts用来做判断用
     TS_DATE_START_JZ = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 09:30:00', "%Y-%m-%d %H:%M:%S")))
-    TS_DATE_END_START = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 12:30:00', "%Y-%m-%d %H:%M:%S")))
+    TS_DATE_END_START = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 18:30:00', "%Y-%m-%d %H:%M:%S")))
     TS_DATE_END_JZ = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 20:00:00', "%Y-%m-%d %H:%M:%S")))
     #判断当前时间来决定提醒早上打卡还是晚上打卡
     logger.info("开始判断当前时间属于早上打卡还是晚上打卡")
