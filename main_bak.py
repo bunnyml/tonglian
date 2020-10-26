@@ -17,7 +17,7 @@ PUSH_WECHAT = "https://sc.ftqq.com/SCU112622Td6ab1713c2c49f53019938b14b42c8055f5
 
 #这两个参数用来请求数据用
 ZS_DATE_START = time.strftime('%Y-%m-%d',time.localtime())+' 00:00:00'
-ZS_DATE_END = time.strftime('%Y-%m-%d',time.localtime())+' 09:30:00'
+ZS_DATE_END = time.strftime('%Y-%m-%d',time.localtime())+' 09:29:00'
 WS_DATE_START = time.strftime('%Y-%m-%d',time.localtime())+' 18:00:00'
 WS_DATE_END = time.strftime('%Y-%m-%d',time.localtime())+' 23:59:59'
 

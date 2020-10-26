@@ -1,163 +1,162 @@
 # -*- coding:utf-8 -*-
-import time
-import copy
 import requests
-import hashlib
-import re
 import logging
+import time
+import re
+import os
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+s = requests.Session()
+
 #API_URL
-MAIN_URL = "http://125.35.5.51/cap-aco-bx"
-SIGN_HS_URL = "http://125.35.5.51/cap-aco-bx/signInController/findSignInInfoByCondition"
-LOGIN_URL = "http://125.35.5.51/cap-aco-bx/login"
-PUSH_WECHAT = "https://sc.ftqq.com/SCU112622Td6ab1713c2c49f53019938b14b42c8055f564265d31e7.send"
+HOST = os.environ['HOST'].split('#')
+MAIN_URL = "http://"+HOST+"/cap-aco-bx/"
 
-#这两个参数用来请求数据用
-ZS_DATE_START = time.strftime('%Y-%m-%d',time.localtime())+' 00:00:00'
-ZS_DATE_END = time.strftime('%Y-%m-%d',time.localtime())+' 09:30:00'
-WS_DATE_START = time.strftime('%Y-%m-%d',time.localtime())+' 18:00:00'
-WS_DATE_END = time.strftime('%Y-%m-%d',time.localtime())+' 23:59:59'
-
-# app = Flask(__name__)
+LOGIN_URL = "login"
+USER_SIGN_URL = "signInMobileController/doSaveSignIn"
+SIGN_HS_URL = "signInController/findSignInInfoByCondition"
 
 
-HEADERS = {
-    'Host':'125.35.5.51',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
+local_name = "%e5%8c%97%e4%ba%ac%e5%90%8c%e8%81%94%e4%bf%a1%e6%81%af%e6%8a%80%e6%9c%af%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8"
+local_address = "%e5%8c%97%e6%b8%85%e8%b7%af68%e5%8f%b7%e9%99%a22%e5%8f%b7%e6%a5%bc2%e5%b1%8258%e5%ae%a4"
+# userId
+# user_code = "402881b17553294901755361923f0003"
+user_code = "75ca4ebc7cef402cbb453d0a97756467"
+# 登录账号
+ACCT_LOGIN = "yz"
+# ACCT_LOGIN = "shifeiduo"
+# 密码
+PASSWORD = "yy616499"
+# PASSWORD = "1234qwer"
+# 签到用户名 这里使用的是URL编码后的用户名
+USER_NAME = "%e6%9d%a8%e5%93%b2"
+# 查询签到记录用户名
+QUERY_USER_NAME = "杨哲"
+
+#参数
+PARAME_DATA = {
+    'pageNum':'0',
+    'pageSize':'10',
+    'queryUserName':USER_NAME,
+    'queryTools':'2',
+    'queryStartTime':'',
+    'queryEndTime':'',
+    'json': '{"version":"2.0.0","compress":"0","encrypt":"0","encode":"1","result":"0","usercode":"'+user_code+'","userId":"'+user_code+'","localName":"'+local_name+'","localAddress":"'+local_address+'","userCode":"'+user_code+'","editContent":""}'
 }
 
-COOKIE = "Cookie"
-EMPTY_STR = r''
-ROWS = 'rows'
-EQUAL = r'='
-# COOKIE_VAL = "sid=b83ff1ce-517a-491f-a342-c2e0a9327de1; username=yz; password=; rememberme=0; autoSubmit=0; sys=OA"
+#Cookie
 N_COOKIE = {
     'sid':'b83ff1ce-517a-491f-a342-c2e0a9327de1',
-    'username':'yz',
+    'username':ACCT_LOGIN,
     'password':'',
     'rememberme':'0',
     'autoSubmit':'0',
     'sys':'OA'
 }
+
+#登录参数
 LOGIN_PARAM = {
     'sys':'OA',
-    'username':'yz',
-    'password':'yy616499',
+    'username':ACCT_LOGIN,
+    'password':PASSWORD,
     'rememberme':'0',
     'autoSubmit':'0'
 }
 
+#获取自己今天的打卡记录
 SIGN_HS_DATE = {
     'pageNum':'0',
     'pageSize':'10',
-    'queryUserName':'杨哲',
+    'queryUserName':QUERY_USER_NAME,
     'queryTools':'2',
     'queryStartTime':'',
     'queryEndTime':''
 }
 
-s = requests.Session()
+#时间范围
+ZS_START_TIME = time.strftime('%Y-%m-%d',time.localtime())+' 08:01:00'
+ZS_END_TIME = time.strftime('%Y-%m-%d',time.localtime())+' 09:25:00'
+WS_START_TIME = time.strftime('%Y-%m-%d',time.localtime())+' 17:30:00'
+WS_END_TIME = time.strftime('%Y-%m-%d',time.localtime())+' 21:30:00'
 
-def list_all_sign():
-    logger.info("获取今天的打卡记录")
-    SIGN_HS_DATE['queryStartTime'] = ZS_DATE_START
-    SIGN_HS_DATE['queryEndTime'] = WS_DATE_END
-    try:
-        result = s.get(url=SIGN_HS_URL, cookies=N_COOKIE, params=SIGN_HS_DATE, headers=HEADERS,  timeout=5)
-        url = str(result.url)
-        if bool(re.search('cap-aco-bx/login',url)) == False:
-            returnData = result.json()
-            logger.info("这是获取到今天的打卡记录")
-            logger.info(returnData['rows'])
-            strs = ''
-            strs += '姓名 | 打卡时间 | 打卡公司名称 | 打卡定位地点  \n'
-            strs += '---------- | ---------- | ---------- | ---------- \n'
-            for obj in returnData['rows']:
-                strs += '【'+obj['userName']+'】 | 【'+obj['signInDate']+'】 | 【'+obj['localName']+'】 | 【'+obj['localAddress'] +'】'+ '\n'
-            return strs
-        else:
-            push_wechat("cookie过期了！", "cookie过期了，请重新设置！")
-            return "cookie过期"
-    except Exception as e:
-        push_wechat("程序异常了，请检查！", "程序异常了，请检查！")
+# Header
+HEADERS = {
+    'Host':HOST,
+    'Content-Type': 'text/plain;charset=UTF-8'
+}
 
+def signIn():
+    result = s.get(url=MAIN_URL+USER_SIGN_URL, cookies=N_COOKIE, params=PARAME_DATA, headers=HEADERS)
+    text = result.json()
+    if text['result'] == 0:
+        logger.info("打卡成功")
+
+def setCookie():
+    logger.info("开始获取Cookie")
+    result = s.post(MAIN_URL+LOGIN_URL, LOGIN_PARAM)
+    N_COOKIE['sid'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
+    logger.info("Cookie替换完毕，cookie为"+N_COOKIE['sid'])
+
+# 1、根据给定的时间段，查询打卡记录
+# 2、打过卡则跳过  未打过卡就开始执行自动打卡
 def get_sign_hs(start, end):
-    # headers = copy.copy(HEADERS)
-    # headers.update({COOKIE: EMPTY_STR.join([COOKIE, cd])})
-    logger.info("开始获取打卡记录")
+    logger.info("开始获取打卡记录，开始时间："+start+"  结束时间："+end)
     SIGN_HS_DATE['queryStartTime'] = start
     SIGN_HS_DATE['queryEndTime'] = end
-    logger.info("拼接打卡记录参数完毕")
     try:
-        logger.info("开始执行requests")
-        result = s.get(url=SIGN_HS_URL, cookies=N_COOKIE, params=SIGN_HS_DATE, headers=HEADERS,  timeout=5)
-        logger.info("执行requests完毕")
+        result = s.get(url=MAIN_URL+SIGN_HS_URL, cookies=N_COOKIE, params=SIGN_HS_DATE, headers=HEADERS,  timeout=5)
         url = str(result.url)
         logger.info("resut的url是"+url)
         if bool(re.search('cap-aco-bx/login',url)) == False:
-            logger.info("判断url链接通过，开始判断是否该打卡了")
             returnData = result.json()
             if returnData['rows'] != []:
-                logger.info("打过卡了")
-                #获取数据库取到的打卡时间
-                #datats = int(time.mktime(time.strptime(i['signInDate'][:19], "%Y-%m-%d %H:%M:%S")))
-                signHistory = list_all_sign()
-                # push_wechat("已经打过卡了，真棒！", "这是今天的打卡情况："+returnData['rows'][0]['signInDate']+"")
-                push_wechat("已经打过卡了，真棒！", signHistory)
+                logger.info("本时段打过卡了")
             else:
-                logger.info("该打卡了")
-                signHistory = list_all_sign()
-                # push_wechat("打卡时间到了！", "今天还没打卡，快去打卡吧！"+signHistory)
-                push_wechat("打卡时间到了！", signHistory)
+                signIn()
+                logger.info("没有查询到打卡记录，开始自动打卡！")
         else:
-            push_wechat("cookie过期了！", "cookie过期了，请重新设置！")
+            logger.info("cookie过期了！", "cookie过期了，请重新设置！")
     except Exception as e:
-        push_wechat("程序异常了，请检查！", "程序异常了，请检查！")
+        logger.info("程序异常了，请检查！", "程序异常了，请检查！")
 
-def chuli_date(type, ts, startjz):
-    if type == 'z':
-        if ts > startjz:
-            return False
-def push_wechat(title, desp):
-    logger.info("开始执行微信推送")
-    WECHAT_PARAM = {
-        'text':title,
-        'desp': desp + '\n\n\n\n > 查询时间：\n'+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    }
-    # requests.get(url="https://sc.ftqq.com/SCU112622Td6ab1713c2c49f53019938b14b42c8055f564265d31e7.send?text="+title+"&desp="+desp+"当前时间是："+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+"",  timeout=5)
-    s.post(PUSH_WECHAT, WECHAT_PARAM)
-    logger.info("微信推送执行完毕，结束运行")
-
-# @app.route('/getStatus', methods=['GET'])
+#主方法
+# 1、判断今天是不是工作日
+# 2、判断当前时间属于早上打卡还是晚上打卡
+# 3、查询当前时间段的打卡记录 早上时间段8:01-9:25  晚上时间段17:30-21:30
 def main():
-    logger.info("调用主方法")
-    #这几个时间ts用来做判断用
-    TS_DATE_START_JZ = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 09:30:00', "%Y-%m-%d %H:%M:%S")))
-    TS_DATE_END_START = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 18:30:00', "%Y-%m-%d %H:%M:%S")))
-    TS_DATE_END_JZ = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 20:00:00', "%Y-%m-%d %H:%M:%S")))
-    #判断当前时间来决定提醒早上打卡还是晚上打卡
-    logger.info("开始判断当前时间属于早上打卡还是晚上打卡")
-    nowts = int(time.time())
-    if nowts < TS_DATE_START_JZ:
+    #判断今天是否是工作日
+    if dateState() == False:
+        logger.info("今天不是工作日不需要打卡")
+        return
+    logger.info("工作日，开始判断当前是早上打卡还是晚上打卡")
+    ZS_START_DATETIME = int(time.mktime(time.strptime(ZS_START_TIME, "%Y-%m-%d %H:%M:%S")))
+    ZS_END_DATETIME = int(time.mktime(time.strptime(ZS_END_TIME, "%Y-%m-%d %H:%M:%S")))
+    WS_START_DATETIME = int(time.mktime(time.strptime(WS_START_TIME, "%Y-%m-%d %H:%M:%S")))
+    WS_END_DATETIME = int(time.mktime(time.strptime(WS_END_TIME, "%Y-%m-%d %H:%M:%S")))
+
+    NOW_DATETIME = int(time.time())
+    # NOW_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 08:38:00', "%Y-%m-%d %H:%M:%S")))
+
+    if NOW_DATETIME > ZS_START_DATETIME and NOW_DATETIME < ZS_END_DATETIME:
         logger.info("现在是早上打卡时间")
-        get_sign_hs(ZS_DATE_START, ZS_DATE_END)
-    elif nowts > TS_DATE_END_START:
+        get_sign_hs(ZS_START_TIME, WS_END_TIME)
+    elif NOW_DATETIME > WS_START_DATETIME and NOW_DATETIME < WS_END_DATETIME:
         logger.info("现在是晚上上打卡时间")
-        get_sign_hs(WS_DATE_START, WS_DATE_END)
+        get_sign_hs(WS_START_TIME, WS_END_TIME)
     else:
         logger.info("计划时间外！")
 
-def getCookie():
-    logger.info('当前时区'+time.strftime('%Z', time.localtime()))
-    logger.info("开始获取Cookie")
-    result = s.post(LOGIN_URL, LOGIN_PARAM)
-    N_COOKIE['sid'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
-    logger.info("Cookie获取完毕，cookie为"+N_COOKIE['sid'])
+def dateState():
+    retultData = s.get("http://tool.bitefu.net/jiari/?d="+time.strftime('%Y-%m-%d',time.localtime()))
+    if retultData.text == '0':
+        return True
+    else:
+        return False
 
 if __name__ == '__main__':
-    # app.run()
-    getCookie()
-    main()
+    # setCookie()
+    # main()
+    print(HOST)
+    print(MAIN_URL)
