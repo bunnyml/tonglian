@@ -160,8 +160,4 @@ def dateState():
         return False
 
 if __name__ == '__main__':
-    # main()
-    print('当前时间'+time.strftime('%Y-%m-%d',time.localtime()))
-    print('自定义化后的时间'+time.strftime('%Y-%m-%d',time.localtime())+' 01:25:00', "%Y-%m-%d %H:%M:%S")
-    print('当前时间的毫秒值'+ str(int(time.time())))
-    print('格式化后时间的毫秒值'+str(int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 01:25:00', "%Y-%m-%d %H:%M:%S")))))
+    main()
