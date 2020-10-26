@@ -11,9 +11,7 @@ logger = logging.getLogger(__name__)
 s = requests.Session()
 
 #API_URL
-# HOST = os.environ['TONGLIAN_HOST']
-HOST = '11'
-BDUSS = os.environ['BDUSS']
+HOST = os.environ['TONGLIAN_HOST']
 MAIN_URL = "http://"+HOST+"/cap-aco-bx/"
 
 LOGIN_URL = "login"
@@ -110,6 +108,7 @@ def get_sign_hs(start, end):
     try:
         result = s.get(url=MAIN_URL+SIGN_HS_URL, cookies=N_COOKIE, params=SIGN_HS_DATE, headers=HEADERS,  timeout=5)
         url = str(result.url)
+        print('url地址是'+url)
         logger.info("resut的url是"+url)
         if bool(re.search('cap-aco-bx/login',url)) == False:
             returnData = result.json()
@@ -140,7 +139,7 @@ def main():
 
     NOW_DATETIME = int(time.time())
     # NOW_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 08:38:00', "%Y-%m-%d %H:%M:%S")))
-
+    setCookie()
     if NOW_DATETIME > ZS_START_DATETIME and NOW_DATETIME < ZS_END_DATETIME:
         logger.info("现在是早上打卡时间")
         get_sign_hs(ZS_START_TIME, WS_END_TIME)
@@ -158,6 +157,4 @@ def dateState():
         return False
 
 if __name__ == '__main__':
-    # setCookie()
-    # main()
-    print(BDUSS)
+    main()
