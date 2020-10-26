@@ -2,9 +2,8 @@ name: '同联考勤记录获取'
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: 
+      - master
   #schedule:
     #- cron: '0/3 5 * * *'
       
