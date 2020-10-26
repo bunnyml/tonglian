@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 s = requests.Session()
 
 #API_URL
-HOST = os.environ['HOST'].split('#')
+HOST = os.environ['HOST']
 MAIN_URL = "http://"+HOST+"/cap-aco-bx/"
 
 LOGIN_URL = "login"
