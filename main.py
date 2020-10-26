@@ -22,18 +22,16 @@ SIGN_HS_URL = "signInController/findSignInInfoByCondition"
 local_name = "%e5%8c%97%e4%ba%ac%e5%90%8c%e8%81%94%e4%bf%a1%e6%81%af%e6%8a%80%e6%9c%af%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8"
 local_address = "%e5%8c%97%e6%b8%85%e8%b7%af68%e5%8f%b7%e9%99%a22%e5%8f%b7%e6%a5%bc2%e5%b1%8258%e5%ae%a4"
 # userId
-# user_code = "402881b17553294901755361923f0003"
-user_code = "75ca4ebc7cef402cbb453d0a97756467"
+# user_code = "75ca4ebc7cef402cbb453d0a97756467"
+user_code = os.environ['USERID']
 # 登录账号
-ACCT_LOGIN = "yz"
-# ACCT_LOGIN = "shifeiduo"
+ACCT_LOGIN = os.environ['ACCT_LOGIN']
 # 密码
-PASSWORD = "yy616499"
-# PASSWORD = "1234qwer"
+PASSWORD = os.environ['PASSWORD']
 # 签到用户名 这里使用的是URL编码后的用户名
-USER_NAME = "%e6%9d%a8%e5%93%b2"
+USER_NAME = os.environ['USERNAME_URL']
 # 查询签到记录用户名
-QUERY_USER_NAME = "杨哲"
+QUERY_USER_NAME = os.environ['USER_NAME_STR']
 
 #参数
 PARAME_DATA = {
@@ -136,14 +134,15 @@ def main():
         logger.info("今天不是工作日不需要打卡")
         return
     logger.info("工作日，开始判断当前是早上打卡还是晚上打卡")
-    ZS_START_DATETIME = int(time.mktime(time.strptime(ZS_START_TIME, "%Y-%m-%d %H:%M:%S")))
-    ZS_END_DATETIME = int(time.mktime(time.strptime(ZS_END_TIME, "%Y-%m-%d %H:%M:%S")))
-    WS_START_DATETIME = int(time.mktime(time.strptime(WS_START_TIME, "%Y-%m-%d %H:%M:%S")))
-    WS_END_DATETIME = int(time.mktime(time.strptime(WS_END_TIME, "%Y-%m-%d %H:%M:%S")))
+    ZS_START_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 00:01:00', "%Y-%m-%d %H:%M:%S")))
+    ZS_END_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 01:25:00', "%Y-%m-%d %H:%M:%S")))
+    WS_START_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 07:30:00', "%Y-%m-%d %H:%M:%S")))
+    WS_END_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 13:30:00', "%Y-%m-%d %H:%M:%S")))
 
     NOW_DATETIME = int(time.time())
     # NOW_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 08:38:00', "%Y-%m-%d %H:%M:%S")))
     setCookie()
+    # 注意这里判断的时间全是UTC时间
     if NOW_DATETIME > ZS_START_DATETIME and NOW_DATETIME < ZS_END_DATETIME:
         logger.info("现在是早上打卡时间")
         get_sign_hs(ZS_START_TIME, WS_END_TIME)
@@ -161,4 +160,8 @@ def dateState():
         return False
 
 if __name__ == '__main__':
-    main()
+    # main()
+    print('当前时间'+time.strftime('%Y-%m-%d',time.localtime()))
+    print('自定义化后的时间'+time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 01:25:00'))
+    print('当前时间的毫秒值'+int(time.time()))
+    print('格式化后时间的毫秒值'+int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 01:25:00', "%Y-%m-%d %H:%M:%S"))))
