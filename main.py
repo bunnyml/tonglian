@@ -160,6 +160,4 @@ def dateState():
 if __name__ == '__main__':
     # setCookie()
     # main()
-    print(HOST)
-    print(MAIN_URL)
     print(BDUSS)
