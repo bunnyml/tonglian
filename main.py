@@ -96,6 +96,8 @@ def signIn():
 def setCookie():
     logger.info("开始获取Cookie")
     result = s.post(MAIN_URL+LOGIN_URL, LOGIN_PARAM)
+    url = str(result.url)
+    print('url地址是'+url)
     N_COOKIE['sid'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
     logger.info("Cookie替换完毕，cookie为"+N_COOKIE['sid'])
 
