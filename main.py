@@ -12,6 +12,7 @@ s = requests.Session()
 
 #API_URL
 HOST = os.environ['TONGLIAN_HOST']
+BDUSS = os.environ['BDUSS']
 MAIN_URL = "http://"+HOST+"/cap-aco-bx/"
 
 LOGIN_URL = "login"
@@ -160,3 +161,4 @@ if __name__ == '__main__':
     # main()
     print(HOST)
     print(MAIN_URL)
+    print(BDUSS)
