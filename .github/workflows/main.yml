@@ -27,4 +27,5 @@ jobs:
         PASSWORD: ${{ secrets.PASSWORD }}
         USERNAME_URL: ${{ secrets.USERNAME_URL }}
         USER_NAME_STR: ${{ secrets.USER_NAME_STR }}
+        SERVERPUSHKEY: ${{ secrets.SERVERPUSHKEY }}
       run: python main.py
