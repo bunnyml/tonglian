@@ -98,7 +98,9 @@ def setCookie():
     result = s.post(MAIN_URL+LOGIN_URL, LOGIN_PARAM)
     url = str(result.url)
     print('url地址是'+url)
+    print('旧的sid'+N_COOKIE['sid'])
     N_COOKIE['sid'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
+    print('新的sid'+N_COOKIE['sid'])
     logger.info("Cookie替换完毕，cookie为"+N_COOKIE['sid'])
 
 # 1、根据给定的时间段，查询打卡记录
