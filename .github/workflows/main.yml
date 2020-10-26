@@ -22,4 +22,9 @@ jobs:
     - name: '开始签到'
       env:
         TONGLIAN_HOST: ${{ secrets.TONGLIAN_HOST }}
+        USERID: ${{ secrets.USERID }}
+        ACCT_LOGIN: ${{ secrets.ACCT_LOGIN }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        USERNAME_URL: ${{ secrets.USERNAME_URL }}
+        USER_NAME_STR: ${{ secrets.USER_NAME_STR }}
       run: python main.py
