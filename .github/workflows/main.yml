@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 'Checkout codes'
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
     - name: '设置python版本'
       uses: actions/setup-python@v1
       with:
