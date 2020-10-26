@@ -11,7 +11,8 @@ logger = logging.getLogger(__name__)
 s = requests.Session()
 
 #API_URL
-HOST = os.environ['TONGLIAN_HOST']
+# HOST = os.environ['TONGLIAN_HOST']
+HOST = '11'
 BDUSS = os.environ['BDUSS']
 MAIN_URL = "http://"+HOST+"/cap-aco-bx/"
 
