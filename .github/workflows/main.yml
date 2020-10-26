@@ -4,8 +4,8 @@ on:
   push:
     branches: 
       - master
-  #schedule:
-    #- cron: '0/3 5 * * *'
+  schedule:
+    - cron: '10 1,13 * * *'
       
 jobs:
   tonglian_sign:
