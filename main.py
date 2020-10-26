@@ -95,10 +95,7 @@ def setCookie():
     logger.info("开始获取Cookie")
     result = s.post(MAIN_URL+LOGIN_URL, LOGIN_PARAM)
     url = str(result.url)
-    print('url地址是'+url)
-    print('旧的sid'+N_COOKIE['sid'])
     N_COOKIE['sid'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
-    print('新的sid'+N_COOKIE['sid'])
     logger.info("Cookie替换完毕，cookie为"+N_COOKIE['sid'])
 
 # 1、根据给定的时间段，查询打卡记录
@@ -110,7 +107,6 @@ def get_sign_hs(start, end):
     try:
         result = s.get(url=MAIN_URL+SIGN_HS_URL, cookies=N_COOKIE, params=SIGN_HS_DATE, headers=HEADERS,  timeout=5)
         url = str(result.url)
-        print('url地址是'+url)
         logger.info("resut的url是"+url)
         if bool(re.search('cap-aco-bx/login',url)) == False:
             returnData = result.json()
@@ -159,5 +155,16 @@ def dateState():
     else:
         return False
 
+PUSH_URL = "https://sc.ftqq.com/"+os.environ['SERVERPUSHKEY']+".send"
+
+def push_wechat():
+    logger.info("开始执行微信推送")
+    WECHAT_PARAM = {
+        'text':"刚刚执行了一次任务",
+        'desp': "刚刚执行了一次定时任务，执行时间是" + time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
+    }
+    s.post(PUSH_URL, WECHAT_PARAM)
+
 if __name__ == '__main__':
+    push_wechat()
     main()
