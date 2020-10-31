@@ -90,6 +90,7 @@ def signIn():
     text = result.json()
     if text['result'] == 0:
         logger.info("打卡成功")
+        push_wechat()
 
 def setCookie():
     logger.info("开始获取Cookie")
@@ -159,12 +160,12 @@ PUSH_URL = "https://sc.ftqq.com/"+os.environ['SERVERPUSHKEY']+".send"
 
 def push_wechat():
     logger.info("开始执行微信推送")
+    ndate = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
     WECHAT_PARAM = {
-        'text':"刚刚执行了一次任务",
-        'desp': "刚刚执行了一次定时任务，执行时间是" + time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
+        'text':ndate + "-执行了一次自动打卡任务",
+        'desp': "系统执行了一次打卡任务，时间是" + ndate 
     }
     s.post(PUSH_URL, WECHAT_PARAM)
 
 if __name__ == '__main__':
-    push_wechat()
     main()
