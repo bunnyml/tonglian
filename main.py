@@ -32,6 +32,8 @@ PASSWORD = os.environ['PASSWORD']
 USER_NAME = os.environ['USERNAME_URL']
 # 查询签到记录用户名
 QUERY_USER_NAME = os.environ['USER_NAME_STR']
+# 打卡状态 1:执行打卡任务  2:不执行打卡任务
+SIGN_STATE = os.environ['SIGN_STATE']
 
 #参数
 PARAME_DATA = {
@@ -126,6 +128,10 @@ def get_sign_hs(start, end):
 # 2、判断当前时间属于早上打卡还是晚上打卡
 # 3、查询当前时间段的打卡记录 早上时间段8:01-9:25  晚上时间段17:30-21:30
 def main():
+    #判断是否是启用状态
+    if SIGN_STATE != 1:
+        logger.info("没有启用打卡任务")
+        return
     #判断今天是否是工作日
     if dateState() == False:
         logger.info("今天不是工作日不需要打卡")
