@@ -1,7 +1,7 @@
 # 简介
 本仓库可以通过GitHub Actions 获取同联考勤打卡记录
 
-1、设置一下几个Secrets
+>设置一下几个Secrets
 - TONGLIAN_HOST  设置固定值为  125.35.5.51
 - USERID  设置为自己的userId
 - ACCT_LOGIN 设置为 自己的账号
