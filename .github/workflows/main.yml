@@ -28,4 +28,5 @@ jobs:
         USERNAME_URL: ${{ secrets.USERNAME_URL }}
         USER_NAME_STR: ${{ secrets.USER_NAME_STR }}
         SERVERPUSHKEY: ${{ secrets.SERVERPUSHKEY }}
+        SIGN_STATE: ${{ secrets.SIGN_STATE }}
       run: python main.py
