@@ -18,4 +18,5 @@
 - SERVERPUSHKEY 微信推送key
 - SIGN_STATE 1:执行打卡任务  2:不执行打卡任务
 
+**secrets设置截图**
 ![secrets设置截图](./secrets-view.png)
