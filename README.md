@@ -6,7 +6,8 @@
 
 执行完自动打卡任务后，会通过微信发送一条推送消息(需要配置SERVERPUSHKEY才可以)
 
-# 使用方法
+## 使用方法
+
 >设置以下几个Secrets
 - TONGLIAN_HOST  设置固定值为  125.35.5.51
 - USERID  设置为自己的userId
