@@ -34,6 +34,8 @@ USER_NAME = os.environ['USERNAME_URL']
 QUERY_USER_NAME = os.environ['USER_NAME_STR']
 # 打卡状态 1:执行打卡任务  2:不执行打卡任务
 SIGN_STATE = os.environ['SIGN_STATE']
+# SID
+SID = os.environ['SID']
 
 #参数
 PARAME_DATA = {
@@ -48,7 +50,7 @@ PARAME_DATA = {
 
 #Cookie
 N_COOKIE = {
-    'sid':'b83ff1ce-517a-491f-a342-c2e0a9327de1',
+    'sid':SID,
     'username':ACCT_LOGIN,
     'password':'',
     'rememberme':'0',
@@ -99,11 +101,13 @@ def setCookie():
     result = s.post(MAIN_URL+LOGIN_URL, LOGIN_PARAM)
     url = str(result.url)
     N_COOKIE['sid'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
+    os.environ['SID'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
     logger.info("Cookie替换完毕，cookie为"+N_COOKIE['sid'])
 
 # 1、根据给定的时间段，查询打卡记录
 # 2、打过卡则跳过  未打过卡就开始执行自动打卡
 def get_sign_hs(start, end):
+    logger.info("开始查询今日打卡情况，SID值为"+SID)
     logger.info("开始获取打卡记录，开始时间："+start+"  结束时间："+end)
     SIGN_HS_DATE['queryStartTime'] = start
     SIGN_HS_DATE['queryEndTime'] = end
@@ -112,6 +116,7 @@ def get_sign_hs(start, end):
         url = str(result.url)
         logger.info("resut的url是"+url)
         if bool(re.search('cap-aco-bx/login',url)) == False:
+            logger.info("cookie正常", "开始判断是否需要打卡！")
             returnData = result.json()
             if returnData['rows'] != []:
                 logger.info("本时段打过卡了")
@@ -119,7 +124,10 @@ def get_sign_hs(start, end):
                 signIn()
                 logger.info("没有查询到打卡记录，开始自动打卡！")
         else:
-            logger.info("cookie过期了！", "cookie过期了，请重新设置！")
+            logger.info("cookie过期了！", "cookie过期了，开始执行重新登录！")
+            setCookie()
+            logger.info("已重新登录！", "SID值为"+N_COOKIE['sid']+"，准备重新打卡")
+            get_sign_hs(start, end)
     except Exception as e:
         logger.info("程序异常了，请检查！", "程序异常了，请检查！")
 
@@ -144,7 +152,7 @@ def main():
 
     NOW_DATETIME = int(time.time())
     # NOW_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 08:38:00', "%Y-%m-%d %H:%M:%S")))
-    setCookie()
+    #setCookie()
     # 注意这里判断的时间全是UTC时间
     if NOW_DATETIME > ZS_START_DATETIME and NOW_DATETIME < ZS_END_DATETIME:
         logger.info("现在是早上打卡时间")
