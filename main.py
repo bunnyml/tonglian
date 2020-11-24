@@ -121,7 +121,7 @@ def get_sign_hs(start, end):
             if returnData['rows'] != []:
                 logger.info("本时段打过卡了")
             else:
-                signIn()
+                #signIn()
                 logger.info("没有查询到打卡记录，开始自动打卡！")
         else:
             logger.info("cookie过期了！", "cookie过期了，开始执行重新登录！")
@@ -162,6 +162,7 @@ def main():
         get_sign_hs(WS_START_TIME, WS_END_TIME)
     else:
         logger.info("计划时间外！")
+        get_sign_hs(ZS_START_TIME, WS_END_TIME)
 
 def dateState():
     retultData = s.get("http://tool.bitefu.net/jiari/?d="+time.strftime('%Y-%m-%d',time.localtime()))
