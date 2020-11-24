@@ -29,5 +29,4 @@ jobs:
         USER_NAME_STR: ${{ secrets.USER_NAME_STR }}
         SERVERPUSHKEY: ${{ secrets.SERVERPUSHKEY }}
         SIGN_STATE: ${{ secrets.SIGN_STATE }}
-        SID: ${{secrets.SID}} 
       run: python main.py
