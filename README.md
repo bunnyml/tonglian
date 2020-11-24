@@ -21,4 +21,12 @@
 **secrets设置截图**
 ![secrets设置截图](./secrets-view.png)
 
+## 微信订阅执行结果设置
 
+1. 前往[sc.ftqq.com](http://sc.ftqq.com/3.version)创建账号，并且生成一个Key。将其增加到Github Secrets中，变量名为`SERVERPUSHKEY`，值为你创建账号获得的key,可在[查看Key](http://sc.ftqq.com/?c=code),查看你的key。
+2. 绑定微信账号，开启微信推送。[绑定微信](http://sc.ftqq.com/?c=wechat&a=bind)
+
+![图示](./serverpush.png)
+3. 推送效果展示
+
+![图示](./push_title.jpg)
