@@ -116,7 +116,7 @@ def get_sign_hs(start, end):
         url = str(result.url)
         logger.info("resut的url是"+url)
         if bool(re.search('cap-aco-bx/login',url)) == False:
-            logger.info("cookie正常", "开始判断是否需要打卡！")
+            logger.info("cookie正常，开始判断是否需要打卡！")
             returnData = result.json()
             if returnData['rows'] != []:
                 logger.info("本时段打过卡了")
