@@ -124,12 +124,12 @@ def get_sign_hs(start, end):
                 #signIn()
                 logger.info("没有查询到打卡记录，开始自动打卡！")
         else:
-            logger.info("cookie过期了！", "cookie过期了，开始执行重新登录！")
+            logger.info("cookie过期了！开始执行重新登录！")
             setCookie()
-            logger.info("已重新登录！", "SID值为"+N_COOKIE['sid']+"，准备重新打卡")
+            logger.info("已重新登录！SID值为"+N_COOKIE['sid']+"，准备重新打卡")
             get_sign_hs(start, end)
     except Exception as e:
-        logger.info("程序异常了，请检查！", "程序异常了，请检查！")
+        logger.info("程序异常了，请检查！程序异常了，请检查！")
 
 #主方法
 # 1、判断今天是不是工作日
