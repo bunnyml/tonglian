@@ -34,8 +34,6 @@ USER_NAME = os.environ['USERNAME_URL']
 QUERY_USER_NAME = os.environ['USER_NAME_STR']
 # 打卡状态 1:执行打卡任务  2:不执行打卡任务
 SIGN_STATE = os.environ['SIGN_STATE']
-# SID
-SID = os.environ['SID']
 
 #参数
 PARAME_DATA = {
@@ -50,7 +48,7 @@ PARAME_DATA = {
 
 #Cookie
 N_COOKIE = {
-    'sid':SID,
+    'sid':'',
     'username':ACCT_LOGIN,
     'password':'',
     'rememberme':'0',
@@ -98,16 +96,24 @@ def signIn():
 
 def setCookie():
     logger.info("开始获取Cookie")
-    result = s.post(MAIN_URL+LOGIN_URL, LOGIN_PARAM)
-    url = str(result.url)
-    N_COOKIE['sid'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
-    os.environ['SID'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
-    logger.info("Cookie替换完毕，cookie为"+N_COOKIE['sid'])
+    result = None
+    try:
+        result = s.post(url=MAIN_URL+LOGIN_URL, params=LOGIN_PARAM, timeout=30)
+        url = str(result.url)
+        N_COOKIE['sid'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
+        logger.info("Cookie替换完毕，cookie为"+N_COOKIE['sid'])
+    except requests.exceptions.ConnectionError as e:
+        if result is not None:
+            result.connection.close()
+        logger.info("获取SID连接异常，服务器拒绝连接！")
+        logger.info(str(e))
+        logger.info("开始重新获取Cookie")
+        setCookie()
+   
 
 # 1、根据给定的时间段，查询打卡记录
 # 2、打过卡则跳过  未打过卡就开始执行自动打卡
 def get_sign_hs(start, end):
-    logger.info("开始查询今日打卡情况，SID值为"+SID)
     logger.info("开始获取打卡记录，开始时间："+start+"  结束时间："+end)
     SIGN_HS_DATE['queryStartTime'] = start
     SIGN_HS_DATE['queryEndTime'] = end
@@ -152,7 +158,7 @@ def main():
 
     NOW_DATETIME = int(time.time())
     # NOW_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 08:38:00', "%Y-%m-%d %H:%M:%S")))
-    #setCookie()
+    setCookie()
     # 注意这里判断的时间全是UTC时间
     if NOW_DATETIME > ZS_START_DATETIME and NOW_DATETIME < ZS_END_DATETIME:
         logger.info("现在是早上打卡时间")
