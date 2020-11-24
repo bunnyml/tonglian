@@ -114,7 +114,8 @@ def setCookie():
 # 1、根据给定的时间段，查询打卡记录
 # 2、打过卡则跳过  未打过卡就开始执行自动打卡
 def get_sign_hs(start, end):
-    logger.info("开始获取打卡记录，开始时间："+start+"  结束时间："+end)
+    setCookie()
+    logger.info("Cookie设置完毕！开始获取打卡记录，开始时间："+start+"  结束时间："+end)
     SIGN_HS_DATE['queryStartTime'] = start
     SIGN_HS_DATE['queryEndTime'] = end
     try:
@@ -158,7 +159,7 @@ def main():
 
     NOW_DATETIME = int(time.time())
     # NOW_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 08:38:00', "%Y-%m-%d %H:%M:%S")))
-    setCookie()
+    
     # 注意这里判断的时间全是UTC时间
     if NOW_DATETIME > ZS_START_DATETIME and NOW_DATETIME < ZS_END_DATETIME:
         logger.info("现在是早上打卡时间")
@@ -168,7 +169,6 @@ def main():
         get_sign_hs(WS_START_TIME, WS_END_TIME)
     else:
         logger.info("计划时间外！")
-        get_sign_hs(ZS_START_TIME, WS_END_TIME)
 
 def dateState():
     retultData = s.get("http://tool.bitefu.net/jiari/?d="+time.strftime('%Y-%m-%d',time.localtime()))
