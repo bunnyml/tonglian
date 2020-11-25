@@ -128,7 +128,7 @@ def get_sign_hs(start, end):
             if returnData['rows'] != []:
                 logger.info("本时段打过卡了")
             else:
-                #signIn()
+                signIn()
                 logger.info("没有查询到打卡记录，开始自动打卡！")
         else:
             logger.info("cookie过期了！开始执行重新登录！")
