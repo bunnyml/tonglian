@@ -29,4 +29,4 @@
 ![图示](./serverpush.png)
 3. 推送效果展示
 
-![图示](./push_title.jpg)
+![图示](./wechat_push.png)
