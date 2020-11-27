@@ -77,7 +77,7 @@ SIGN_HS_DATE = {
 
 #时间范围
 ZS_START_TIME = time.strftime('%Y-%m-%d',time.localtime())+' 08:01:00'
-ZS_END_TIME = time.strftime('%Y-%m-%d',time.localtime())+' 09:25:00'
+ZS_END_TIME = time.strftime('%Y-%m-%d',time.localtime())+' 09:30:00'
 WS_START_TIME = time.strftime('%Y-%m-%d',time.localtime())+' 17:30:00'
 WS_END_TIME = time.strftime('%Y-%m-%d',time.localtime())+' 21:30:00'
 
@@ -163,7 +163,7 @@ def main():
     # 注意这里判断的时间全是UTC时间
     if NOW_DATETIME > ZS_START_DATETIME and NOW_DATETIME < ZS_END_DATETIME:
         logger.info("现在是早上打卡时间")
-        get_sign_hs(ZS_START_TIME, WS_END_TIME)
+        get_sign_hs(ZS_START_TIME, ZS_END_TIME)
     elif NOW_DATETIME > WS_START_DATETIME and NOW_DATETIME < WS_END_DATETIME:
         logger.info("现在是晚上上打卡时间")
         get_sign_hs(WS_START_TIME, WS_END_TIME)
