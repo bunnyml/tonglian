@@ -160,6 +160,7 @@ def main():
     NOW_DATETIME = int(time.time())
     # NOW_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 08:38:00', "%Y-%m-%d %H:%M:%S")))
     
+    logger.info("UTC当前时间为"+time.strftime('%Y-%m-%d %H:%M:%S'))
     # 注意这里判断的时间全是UTC时间
     if NOW_DATETIME > ZS_START_DATETIME and NOW_DATETIME < ZS_END_DATETIME:
         logger.info("现在是早上打卡时间")
