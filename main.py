@@ -143,7 +143,7 @@ def get_sign_hs(start, end):
 # 2、判断当前时间属于早上打卡还是晚上打卡
 # 3、查询当前时间段的打卡记录 早上时间段8:01-9:25  晚上时间段17:30-21:30
 def main():
-    print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()))
+    logger.info(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()))
     #判断是否是启用状态
     if SIGN_STATE != '1':
         logger.info("没有启用打卡任务")
