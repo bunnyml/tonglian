@@ -154,8 +154,8 @@ def main():
         return
     logger.info("工作日，开始判断当前是早上打卡还是晚上打卡")
     ZS_START_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 00:01:00', "%Y-%m-%d %H:%M:%S")))
-    ZS_END_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 01:25:00', "%Y-%m-%d %H:%M:%S")))
-    WS_START_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 07:30:00', "%Y-%m-%d %H:%M:%S")))
+    ZS_END_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 01:30:00', "%Y-%m-%d %H:%M:%S")))
+    WS_START_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 09:30:00', "%Y-%m-%d %H:%M:%S")))
     WS_END_DATETIME = int(time.mktime(time.strptime(time.strftime('%Y-%m-%d',time.localtime())+' 13:30:00', "%Y-%m-%d %H:%M:%S")))
 
     NOW_DATETIME = int(time.time())
