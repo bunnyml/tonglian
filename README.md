@@ -9,7 +9,7 @@
 ## 使用方法
 
 >设置以下几个Secrets
-- TONGLIAN_HOST  设置固定值为  125.35.5.51
+- TONGLIAN_HOST  设置固定值为  152.136.204.187
 - USERID  设置为自己的userId
 - ACCT_LOGIN 设置为 自己的账号
 - PASSWORD 设置为自己的密码
