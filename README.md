@@ -17,6 +17,7 @@
 - USER_NAME_STR 设置为自己的名字，这里是中文，不需要转码
 - SERVERPUSHKEY 微信推送key
 - SIGN_STATE 1:执行打卡任务  2:不执行打卡任务
+- SIGN_STATE 1:执行打卡任务  2:不执行打卡任务
 
 **secrets设置截图**
 ![secrets设置截图](./secrets-view.png)
