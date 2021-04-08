@@ -156,6 +156,19 @@ def getCookie():
     result = s.post(LOGIN_URL, LOGIN_PARAM)
     N_COOKIE['sid'] = result.request.headers['Cookie'].split(';')[0].split('=')[1]
     logger.info("Cookie获取完毕，cookie为"+N_COOKIE['sid'])
+    
+def get_tbs(bduss):
+    logger.info("获取tbs开始")
+    headers = copy.copy(HEADERS)
+    headers.update({COOKIE: EMPTY_STR.join([BDUSS, EQUAL, bduss])})
+    try:
+        tbs = s.get(url=TBS_URL, headers=headers, timeout=5).json()[TBS]
+    except Exception as e:
+        logger.error("获取tbs出错" + e)
+        logger.info("重新获取tbs开始")
+        tbs = s.get(url=TBS_URL, headers=headers, timeout=5).json()[TBS]
+    logger.info("获取tbs结束")
+    return tbs
 
 if __name__ == '__main__':
     # app.run()
