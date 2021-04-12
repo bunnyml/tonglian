@@ -14,6 +14,13 @@ def load(self):
 def get_new_ip(self):
     return requests.get(url=self.ip).text
 
+def signIn():
+    result = s.get(url=MAIN_URL+USER_SIGN_URL, cookies=N_COOKIE, params=PARAME_DATA, headers=HEADERS)
+    text = result.json()
+    if text['result'] == 0:
+        logger.info("打卡成功")
+        push_wechat()
+
 def __init__(self,Id,Token):
     get_new_ip(self)
     self.login_token=str(Id)+","+str(Token)
