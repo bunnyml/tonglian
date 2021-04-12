@@ -15,6 +15,7 @@ def get_new_ip(self):
     return requests.get(url=self.ip).text
 
 def signIn():
+    time.strftime('%Y-%m-%d',time.localtime())+' 21:30:00'
     result = s.get(url=MAIN_URL+USER_SIGN_URL, cookies=N_COOKIE, params=PARAME_DATA, headers=HEADERS)
     text = result.json()
     if text['result'] == 0:
