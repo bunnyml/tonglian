@@ -33,3 +33,16 @@ def __init__(self,Id,Token):
     self.data={"login_token":self.login_token,"format":self.format,"lang":self.lang}
     self.path=os.path.dirname(os.path.realpath(__file__))
     self.domain_list=self.load()
+
+def get_record_list(self):
+		url=self.api+"Record.List"
+		res = []
+		for i in self.domain_list:
+			data=self.data.copy()
+			data.update({"domain":i[0]})
+			r=json.loads(requests.post(url=url,data=data,headers=self.headers).text)
+			for j in r["records"]:
+				if (j["type"]=="A" and j["name"] in i):
+					j["domain"]=i[0]
+					res.append(j)
+		return res
