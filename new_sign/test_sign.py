@@ -46,3 +46,15 @@ def get_record_list(self):
 					j["domain"]=i[0]
 					res.append(j)
 		return res
+
+def update(self):
+		url=self.api+"Record.Modify"
+		record=self.get_record_list()
+		new_ip=self.get_new_ip()
+		new_ip=str(new_ip).strip()
+		for i in record:
+			if (r["status"]["code"]=="1"):
+				log = "%s.%s 成功被指向新的ip地址：%s" % (i["name"],i["domain"],new_ip)
+			else:
+				log = r["status"]["message"]
+			self.write_log(log)
