@@ -60,6 +60,8 @@ def update(self):
 			self.write_log(log)
 
 def write_log(self,content):
+        url=self.api+"domain.List"
+		t=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 		content=t+"\t"+content+"\n"
 		file=self.path+'/result.log'
 		with open(file,"a+") as f:
