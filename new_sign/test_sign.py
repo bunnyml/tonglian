@@ -48,21 +48,24 @@ def get_record_list(self):
 		return res
 
 def update(self):
-		url=self.api+"Record.Modify"
-		record=self.get_record_list()
-		new_ip=self.get_new_ip()
-		new_ip=str(new_ip).strip()
-		for i in record:
-			if (r["status"]["code"]=="1"):
-				log = "%s.%s 成功被指向新的ip地址：%s" % (i["name"],i["domain"],new_ip)
-			else:
-				log = r["status"]["message"]
-			self.write_log(log)
+    url=self.api+"Record.Modify"
+    record=self.get_record_list()
+    new_ip=self.get_new_ip()
+    new_ip=str(new_ip).strip()
+    for i in record:
+        if (r["status"]["code"]=="1"):
+            log = "%s.%s 成功被指向新的ip地址：%s" % (i["name"],i["domain"],new_ip)
+        else:
+            log = r["status"]["message"]
+        self.write_log(log)
 
 def write_log(self,content):
-        url=self.api+"domain.List"
-		t=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-		content=t+"\t"+content+"\n"
-		file=self.path+'/result.log'
-		with open(file,"a+") as f:
-			f.write(content)
+    url=self.api+"domain.List"
+    t=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    content=t+"\t"+content+"\n"
+    file=self.path+'/result.log'
+    data=self.data.copy()
+    data.update({"domain":0})
+    with open(file,"a+") as f:
+        f.write(content)
+        log = "日志打印成功！"
