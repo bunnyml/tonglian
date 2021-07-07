@@ -58,3 +58,9 @@ def update(self):
 			else:
 				log = r["status"]["message"]
 			self.write_log(log)
+
+def write_log(self,content):
+		content=t+"\t"+content+"\n"
+		file=self.path+'/result.log'
+		with open(file,"a+") as f:
+			f.write(content)
