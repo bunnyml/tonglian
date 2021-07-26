@@ -5,6 +5,27 @@ import time
 import os
 import requests
 
+application = get_wsgi_application()
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+
+ALLOWED_HOSTS = ['*']
+
+# Application definition
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'SignIn',
+]
+
+
+
 def load(self):
     file=self.path+'/config.json'
     with open(file,'r') as f:
