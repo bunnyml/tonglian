@@ -4,6 +4,8 @@ import json
 import time
 import os
 import requests
+from django.contrib import admin
+from django.urls import path, include
 
 application = get_wsgi_application()
 
@@ -106,6 +108,35 @@ DATABASES = {
         'PORT': 3306,
     }
 }
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('SignIn.urls'))
+]
+
+SIGN_HEADERS = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Cookie': 'ka=open',
+    'User-Agent': 'bdtb for Android 9.7.8.0',
+    'Connection': 'close',
+    'Accept-Encoding': 'gzip',
+    'Host': 'c.tieba.baidu.com',
+}
+SIGN_DATA = {
+    '_client_type': '2',
+    '_client_version': '9.7.8.0',
+    '_phone_imei': '000000000000000',
+    'model': 'MI+5',
+    "net_type": "1",
+}
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "TiebaProject.settings")
+
+application = get_wsgi_application()
+
+# Others
+SITE_URL = "sign.heeeepin.com"
+
 
 def load(self):
     file=self.path+'/config.json'
