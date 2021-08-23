@@ -109,6 +109,32 @@ DATABASES = {
     }
 }
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.0/howto/static-files/
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+# SESSION
+SESSION_COOKIE_AGE = 3600
+
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 25
+
+# 发送邮件的邮箱
+EMAIL_HOST_USER = None
+# 在邮箱中设置的客户端授权密码（指的是你开启服务时腾讯给的那个授权码）
+EMAIL_HOST_PASSWORD = None
+# 收件人看到的发件人
+EMAIL_FROM = None
+
+# 日志
+LOGGING_DIR = "/var/log/tieba"  # 日志存放路径
+if not os.path.exists(LOGGING_DIR):
+    os.makedirs(LOGGING_DIR, 755);
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('SignIn.urls'))
