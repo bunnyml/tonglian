@@ -73,3 +73,26 @@ class UserManager(models.Manager):
                 user.save()
                 # 邮件通知
                 user.daliy_notice()
+
+class SignLog(models.Model):
+    name = models.CharField(max_length=100, verbose_name="贴吧名")
+    update_time = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name="所属用户")
+    ret_log = models.TextField(verbose_name="签到日志")
+    objects = SignLogManager()
+
+    class Meta:
+        db_table = 'sign_log'
+        ordering = ['-update_time']
+        verbose_name = '签到日志'
+        verbose_name_plural = verbose_name
+
+
+class SignTotal(models.Model):
+    number = models.IntegerField()
+
+    class Meta:
+        db_table = 'sign_total'
+        verbose_name = '签到总数'
+        verbose_name_plural = verbose_name
