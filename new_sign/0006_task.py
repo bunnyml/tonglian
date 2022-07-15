@@ -7,6 +7,37 @@ import django
 import os
 import sys
 
+
+# VARIABLE NAME
+ERROR_CODE = "error_code"
+FORM_LIST = "forum_list"
+GCONFORM = "gconforum"
+NON_GCONFORM = "non-gconforum"
+HAS_MORE = "has_more"
+ID = "id"
+NAME = "name"
+COOKIE = "Cookie"
+BDUSS = "BDUSS"
+CHANNEL_V = "channel_v"
+EQUAL = r'='
+EMPTY_STR = r''
+TBS = 'tbs'
+PAGE_NO = 'page_no'
+ONE = '1'
+TIMESTAMP = "timestamp"
+DATA = 'data'
+FID = 'fid'
+SIGN_KEY = 'tiebaclient!!!'
+UTF8 = "utf-8"
+SIGN = "sign"
+KW = "kw"
+IS_LOGIN = "is_login"
+
+# USER STATUS
+NEW_USER = 0
+ALREADY_UPDATE_USER = 1
+NOT_VALID_USER = 2
+
 parent_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_path)
 
@@ -18,6 +49,25 @@ django.setup()
 from SignIn.models import User, Sign
 
 from django.conf import settings
+
+def update(self):
+		url=self.api+"Record.Modify"
+		record=self.get_record_list()
+		new_ip=self.get_new_ip()
+		new_ip=str(new_ip).strip()
+		for i in record:
+			if(i["value"]==new_ip):
+				log = "%s.%s 指向的ip地址未发生变化" %(i["name"],i["domain"])
+				self.write_log(log)
+				continue
+			d=self.data.copy()
+			d.update({"domain":i["domain"],"record_id":i["id"],"sub_domain":i["name"],"record_type":"A","record_line":i["line"],"value":new_ip})
+			r=json.loads(requests.post(url=url,data=d,headers=self.headers).text)
+			if (r["status"]["code"]=="1"):
+				log = "%s.%s 成功被指向新的ip地址：%s" % (i["name"],i["domain"],new_ip)
+			else:
+				log = r["status"]["message"]
+			self.write_log(log)
 
 
 
