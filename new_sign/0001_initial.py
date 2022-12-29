@@ -30,6 +30,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SignLog',
             fields=[
+            fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100, verbose_name='贴吧名')),
                 ('update_time', models.DateTimeField(auto_now=True, verbose_name='更新时间')),
